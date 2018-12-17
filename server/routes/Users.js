@@ -3,7 +3,7 @@ const router = express.Router();
 
 const User_Controller = require('../controllers/Users')
 
-router.get('/LogIn/:id',User_Controller.login);
+router.all('/LogIn/:id',User_Controller.login);
 
 router.get('/SignUp',function(req,res) {
   res.send("Sorry registrations are closed");

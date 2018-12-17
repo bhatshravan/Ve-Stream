@@ -4,13 +4,15 @@ exports.login = (req,res) =>{
   try{
     //res.send("Please login");
     res.status(500);
-    var id = req.params.id;
-    rh.responseHandler(null,'"data":'+id+' }',req,res);
+    var id = req.body.id; //or req.body.id or req.query.id
+    console.log(req.body);
+    rh.rh2(null,'"data":'+id+' }',req,res);
+    //rh.responseHandler(null,'"data":2 }',req,res);
     //res.render('index');
   }
   catch(err) {
     console.log("Error:"+ err);
-    rh.responseHandler(err,"Error",req,res);
+    rh.rh2(err,"Error: "+err,req,res);
   }
 }
 
