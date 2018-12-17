@@ -1,7 +1,13 @@
-var express = require('express');
+//Set up node libraries
+const express = require('express');
 const mongoose = require('mongoose');
 const config = require('./config.js');
 const path = require('path');
+const bodyParser = require('body-parser');
+
+//Set up mvc modules
+const Routes = require('./routes/Routes.js');
+
 
 //Connect to mongodb
 const MongoDb = process.env.MONGODB_URI || config.mongodb_url;
@@ -15,18 +21,13 @@ var app = express();
 
 //Set up a render engine which is ejs
 app.set('view engine', 'ejs');
-app.set('views', 'server/views/ejs');
+app.set('views', 'server/views');
 
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-//Home page
-app.all('/', (req,res) => {
-  res.sendFile(path.join(__dirname + '/client/index.html'));
-});
+Routes(app);
 
-//Home page
-app.all('/hello', (req,res) => {
-  res.render('index');
-});
 
 app.listen(config.PORT, function(){
   console.log("Started server at: "+config.ip_Address+":"+config.PORT);
