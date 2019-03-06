@@ -1,24 +1,18 @@
 var rh = require('../response.js');
 
 exports.login = (req,res) =>{
-  try{
+  try
+  {
     //res.send("Please login");
-    res.status(500);
+    res.status(200);
     var id = req.body.id; //or req.body.id or req.query.id
-    console.log(req.body);
-    rh.rh2(null,'"data":'+id+' }',req,res);
-    //rh.responseHandler(null,'"data":2 }',req,res);
+    //rh.rh2(null,'"data":'+id+' }',req,res);
+    rh.responseHandler(null,'"data":'+id+' }',req,res);
     //res.render('index');
   }
-  catch(err) {
+  catch(err)
+  {
     console.log("Error:"+ err);
     rh.rh2(err,"Error: "+err,req,res);
   }
-}
-
-exports.api = (req,res) => {
-  var hello = [];
-  hello.push('hu');
-  var bb = JSON.stringify(hello);
-  res.render(bb);
-}
+};
