@@ -1,34 +1,60 @@
-//Set up node libraries
-const express = require('express');
-const mongoose = require('mongoose');
 const config = require('./config.js');
-const path = require('path');
+const router = require('./src/routes/Routes');
+const express = require('express');
 const bodyParser = require('body-parser');
-
-//Set up mvc modules
-const Routes = require('./routes/Routes.js');
-
+const mongoose = require('mongoose');
+const cors = require('cors');
+const logger = require('morgan');
+const app = express();
+const path = require('path');
+const cookieParser = require('cookie-parser');
 
 //Connect to mongodb
-const MongoDb = process.env.MONGODB_URI || config.mongodb_url;
-mongoose.connect(MongoDb, { useNewUrlParser: true });
+const MongoDb = config.database;
+mongoose.connect(MongoDb, { useCreateIndex: true, useNewUrlParser: true });
 mongoose.Promise = global.Promise;
 const db = mongoose.connection;
-db.on('error',console.error.bind(console, 'MongoDb connection error'));
+db.on('error', console.error.bind(console, 'MongoDb connection error'));
+console.log('MongoDB connected: ' + config.database);
 
-//Connect to express
-var app = express();
+//Use CORS
+app.use(cors());
+app.options('*', cors());
+
+//BodyParser and logger with morgan
+app.use(logger('dev'));
+app.use(
+  bodyParser.urlencoded({
+    extended: false,
+  })
+);
+app.use(bodyParser.json());
+app.use(cookieParser());
+
+// serve static files from template
+app.use('/public', express.static('./public/'));
 
 //Set up a render engine which is ejs
+app.engine('html', require('ejs').renderFile);
+app.set('views', './src/views');
 app.set('view engine', 'ejs');
-app.set('views', 'server/views');
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+//Enable cors
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization, Access-Control-Allow-Credentials'
+  );
+  res.header('Access-Control-Allow-Credentials', 'true');
+  next();
+});
 
-Routes(app);
+//Start router
+router(app);
 
-
-app.listen(config.PORT, function(){
-  console.log("Started server at: "+config.ip_Address+":"+config.PORT);
+//Start server
+app.listen(config.PORT, function() {
+  console.log('Started server on: ' + config.PORT + '\n\n');
 });
