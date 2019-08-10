@@ -15,7 +15,7 @@ exports.signup = (req, res, next) => {
 
     User.create(UserData, function(err, user) {
       if (err) {
-        logger.console('err: ', err);
+        // logger.console('err: ', err);
         return logger.sendResponse(true, 'Insertion error', req, res);
       } else {
         datas = 'No error,successfully inserted';
@@ -43,6 +43,17 @@ exports.login = (req, res) => {
     let error = 'Please enter username and password';
     logger.sendResponse(true, error, req, res);
   }
+};
+
+exports.listUsers = (req, res) => {
+  User.find()
+    .sort({ _id: -1 })
+    .limit(50)
+    .exec(logger.ParseCallback);
+};
+
+exports.deleteAll = (req, res) => {
+  User.findOneAndDelete(req.params.id, logger.ParseCallback);
 };
 
 // module.exports = {

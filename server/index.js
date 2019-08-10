@@ -8,6 +8,7 @@ const logger = require('morgan');
 const app = express();
 const path = require('path');
 const cookieParser = require('cookie-parser');
+const fileupload = require('express-fileupload');
 
 //Connect to mongodb
 const MongoDb = config.database;
@@ -30,6 +31,9 @@ app.use(
 );
 app.use(bodyParser.json());
 app.use(cookieParser());
+
+// default options
+app.use(fileUpload());
 
 // serve static files from template
 app.use('/public', express.static('./public/'));

@@ -2,11 +2,11 @@ exports.console = msg => {
   console.log(msg);
 };
 
-exports.ParseCallback = (res, isSuccess, message) => {
+exports.ParseCallback = (isSuccess, message) => {
   if (!isSuccess) {
-    res.status(500).json({ success: false, message: message });
+    res.status(500).json({ err: err });
   } else {
-    res.status(200).json({ success: true, message: message });
+    res.status(200).json(data);
   }
 };
 
