@@ -49,10 +49,13 @@ exports.listUsers = (req, res) => {
   User.find()
     .sort({ _id: -1 })
     .limit(50)
-    .exec(logger.ParseCallback);
+    // .exec(logger.ParseCallback);
+    .exec((err, data) => {
+      res.send(data);
+    });
 };
 
-exports.deleteAll = (req, res) => {
+exports.deleteOne = (req, res) => {
   User.findOneAndDelete(req.params.id, logger.ParseCallback);
 };
 

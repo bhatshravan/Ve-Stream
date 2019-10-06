@@ -2,7 +2,7 @@ exports.console = msg => {
   console.log(msg);
 };
 
-exports.ParseCallback = (isSuccess, message) => {
+exports.ParseCallback = (isSuccess, message, res) => {
   if (!isSuccess) {
     res.status(500).json({ err: err });
   } else {

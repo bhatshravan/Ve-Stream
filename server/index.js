@@ -9,14 +9,29 @@ const app = express();
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const fileupload = require('express-fileupload');
+require('dotenv').config();
 
 //Connect to mongodb
-const MongoDb = config.database;
-mongoose.connect(MongoDb, { useCreateIndex: true, useNewUrlParser: true });
+// const MongoDb = config.database;
+const MongoDb = process.env.DB_URI;
+mongoose.connect(MongoDb, {
+  useCreateIndex: true,
+  useNewUrlParser: true,
+});
 mongoose.Promise = global.Promise;
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDb connection error'));
-console.log('MongoDB connected: ' + config.database);
+console.log('MongoDB connected');
+
+// const uri = process.env.DB_URI;
+// const client = new MongoClient(uri, {
+//   useNewUrlParser: true
+// });
+// client.connect(err => {
+//   const collection = client.db("test").collection("devices");
+//   // perform actions on the collection object
+//   client.close();
+// });
 
 //Use CORS
 app.use(cors());
@@ -33,7 +48,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 // default options
-app.use(fileUpload());
+app.use(fileupload());
 
 // serve static files from template
 app.use('/public', express.static('./public/'));

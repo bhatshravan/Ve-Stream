@@ -8,6 +8,6 @@ router.post('/signup/', User_Controller.signup);
 
 router.get('/allUsers/', User_Controller.listUsers);
 
-router.delete('/deleteAll', User_Controller.deleteAll);
+router.post('/deleteOne/', User_Controller.deleteOne);
 
 module.exports = router;
